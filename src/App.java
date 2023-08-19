@@ -123,7 +123,7 @@ public class App {
                 int picker = rand.nextInt(servants5Stars.size());
                 servant = servants5Stars.get(picker) + " (Servant) {*****}";
 
-            } else if (1.00 < rollChance2 || rollChance2 <= 4.00) {
+            } else if (1.00 < rollChance2 && rollChance2 <= 5.00) {
                 int picker = rand.nextInt(ce5Stars.size());
                 ce = ce5Stars.get(picker) + " (CE) {*****}";
 
@@ -134,7 +134,7 @@ public class App {
                 int picker = rand.nextInt(servants4Stars.size());
                 servant = servants4Stars.get(picker) + " (Servant) {****}";
 
-            } else if (3.00 < rollChance2 || rollChance2 <= 12.00) {
+            } else if (3.00 < rollChance2 && rollChance2 <= 15.00) {
                 int picker = rand.nextInt(ce4Stars.size());
                 ce = ce4Stars.get(picker) + " (CE) {****}";
 
@@ -145,7 +145,7 @@ public class App {
                 int picker = rand.nextInt(servants3Stars.size());
                 servant = servants3Stars.get(picker) + " (Servant) {***}";
 
-            } else if (39.98 < rollChance2 || rollChance2 <= 80.00) {
+            } else if (39.98 < rollChance2 && rollChance2 <= 80.00) {
                 int picker = rand.nextInt(ce3Stars.size());
                 ce = ce3Stars.get(picker) + " (CE) {***}";
 
