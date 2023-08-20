@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.*;
 
 public class App {
@@ -7,39 +11,76 @@ public class App {
      */
     public static void main(String[] args) throws Exception {
         Scanner scan = new Scanner(System.in);
-        System.out.println("How many times do you wanna gacha?");
-        int amount = scan.nextInt();
 
         int counter = 0;
+        int choice = 0;
+        boolean state = true;
 
-        for (int i = 0; i < amount; i++) {
-            System.out.println("Choose how many times do you want to roll... (1x |10x)");
-            System.out.print("Choice: ");
-            int roll = scan.nextInt();
+        System.out.println(
+                "Pick a choice... \n 1. FGO Gacha\n 2. Arknights Gacha\n 3. Blue Archive Gacha\n 4. CSGO Knife Case Opening\n 5. Exit");
+        System.out.print("Choice: ");
+        choice = scan.nextInt();
 
-            if (roll == 1 || roll == 10) {
-                if (roll == 1) {
-                    Chance(roll);
-                    counter++;
-                    if (counter == 10) {
-                        Chance(roll);
-                        counter = 0;
+        switch (choice) {
+            case 1:
+                while (state) {
+                    System.out.println("How many times do you wanna gacha?");
+                    int amount = scan.nextInt();
+                    for (int i = 0; i < amount; i++) {
+                        System.out.println("Choose how many times do you want to roll... (1x |10x)");
+                        System.out.print("Choice: ");
+                        int roll = scan.nextInt();
+
+                        if (roll == 1 || roll == 10) {
+                            if (roll == 1) {
+                                FGORoll(roll);
+                                counter++;
+                                if (counter == 10) {
+                                    FGORoll(roll);
+                                    counter = 0;
+                                }
+                            } else if (roll == 10) {
+                                for (int y = 0; y < roll + 1; y++) {
+                                    FGORoll(roll);
+                                    System.out.println();
+                                }
+                            }
+
+                        } else {
+                            System.out.println("Invalid Input. Please Pick Again.");
+                            amount = amount + 1;
+                        }
                     }
-                } else if (roll == 10) {
-                    for (int y = 0; y < roll + 1; y++) {
-                        Chance(roll);
-                        System.out.println();
+
+                    System.out.println("Do you want to roll again? [Y/N]");
+                    System.out.print("Choice: ");
+                    String str = scan.next();
+
+                    if (str.equalsIgnoreCase("yes") || str.equalsIgnoreCase("y")) {
+                        state = true;
+                    } else {
+                        state = false;
+                        System.out.println("See you soon!");
+                        main(args);
                     }
                 }
+            case 2:
 
-            } else {
-                System.out.println("Invalid Input. Please Pick Again.");
-                amount = amount + 1;
-            }
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            case 5:
+
+                break;
         }
+
     }
 
-    private static void Chance(int roll) {
+    private static void FGORoll(int roll) throws IOException {
         Random rand = new Random();
         double chance5Star = 5.00;
         double chance4Star = 15.00;
@@ -47,73 +88,128 @@ public class App {
         String servant = null;
         String ce = null;
 
-        List<String> servants5Stars = new ArrayList<>(
-                List.of("Artoria Pendragon", "Altera", "Mordred", "Dioscuri", "Orion", "Nikola Tesla",
-                        "Arjuna", "Napoleon", "Minamoto no Tametomo", "Karna", "Artoria Pendragon (Lancer)",
-                        "Enkidu", "Bradamante", "Vritra", "Bhima", "Francis Drake", "Queen Medb", "Ozymandias",
-                        "Quetzalcoatl", "Achilles", "Europa", "Odysseus", "Nemo", "Tai Gong Wang", "Zhuge Liang",
-                        "Tamamo no Mae", "Xuanzang Sanzang", "Scheherazade", "Anastasia", "Jack the Ripper",
-                        "Osakabehime", "Li Shuwen", "Vlad III", "Nightingale", "Cu Chullain (Alter)", "Xiang Yu",
-                        "Galatea", "Jeanne d'Arc", "Nitocris Alter", "Jinako Carigri", "Sitonai"));
+        List<String> servants5Stars = Files.readAllLines(new File("5StarServantsList.txt").toPath(),
+                Charset.defaultCharset());
 
-        List<String> servants4Stars = new ArrayList<>(
-                List.of("Artoria Pendragon (Alter)", "Nero Claudius", "Siegfried", "Chevalier d'Eon", "Rama",
-                        "Lancelot (Saber)", "Gawain", "Suzuka Gozen", "Yagyu Munenori", "Diarmuid Ua Duibhne (Saber)",
-                        "Lanling Wang", "Lakshimibai", "Watanabe no Tsuna", "Barghest", "Roland", "EMIYA", "Atalanta",
-                        "Tristan", "EMIYA (Alter)", "Tomoe Gozen", "Chiron", "Asvatthaman", "Baobhan Sith", "Zenobia",
-                        "Elizabeth Bathory", "Artoria Pendragon (Lancer Alter)", "Fionn mac Cumhaill",
-                        "Li Shuwen (Lancer)",
-                        "Vlad III (EXTRA)", "Medusa (Lancer)", "Parvati", "Nezha", "Valkyrie", "Qin Liangyu", "Caenis",
-                        "Percival", "Don Quixote", "Marie Antoinette", "Martha", "Anne Bonny & Mary Read", "Astolfo",
-                        "Dobrynya Nikitich", "Huang Feihu", "Medea (Lily)", "Nursery Rhyme", "Helena Blavatsky",
-                        "Thomas Edison",
-                        "Nitocris", "Gilgamesh (Caster)", "Circe", "Queen of Sheba", "Stheno", "Carmilla",
-                        "EMIYA (Assassin)",
-                        "Yan Qing", "Wu Zetian", "Mochizuki Chiyome", "Kato Danzo", "Consort Yu", "Hercales",
-                        "Lancelot",
-                        "Tamamo Cat", "Frankenstein", "Beowulf", "Ibaraki Douji", "Pethesilea", "Atalanta (Alter)",
-                        "Kreimhild",
-                        "Duryodhana", "Astrea", "Gorgon", "Hessian Lobo", "Hephaestion", "Tenochtitlan"));
+        List<String> servants4Stars = Files.readAllLines(new File("4StarServantsList.txt").toPath(),
+                Charset.defaultCharset());
 
-        List<String> servants3Stars = new ArrayList<>(
-                List.of("Gaius Julius Caesar", "Gilles de Rais (Saber)", "Fergus mac Roich", "Bedivere", "Robin Hood",
-                        "Euryale",
-                        "David", "Kid Gil", "Billy the Kid", "Tawara Touta", "William Tell", "Cu Chullain",
-                        "Cu Chullain (Prototype)",
-                        "Hector", "Romulus", "Diarmuid Ua Duibhne", "Jaguar Man", "Hozoin Inshun", "Medusa", "Boudica",
-                        "Ushiwakamaru",
-                        "Alexander", "Christopher Columbus", "Red Hare", "Mandricardo", "Medea", "Gilles de Rais",
-                        "Mephistopheles",
-                        "Cu Chullain (Caster)", "Paracelsus von Hohenheim", "Charles Babbage", "Geronimo", "Avicebron",
-                        "Asclepius",
-                        "Zhang Jue", "Jing Ke", "Henry Jekyll & Hyde", "Hassan of the Hundred Faces", "Fuma Kotaro",
-                        "Hassan of the Serenity",
-                        "Lu Bu Fengxian", "Darius III", "Kiyohime", "Antonio Salieri", "Xu Fu"));
+        List<String> servants3Stars = Files.readAllLines(new File("3StarServantsList.txt").toPath(),
+                Charset.defaultCharset());
 
-        List<String> ce5Stars = new ArrayList<>(
-                List.of("Formal Craft", "Imaginary Around", "Limited Zero Over", "Kaleidoscope", "Heaven's Feel",
-                        "Prisma Cosmos", "The Black Grail",
-                        "Victor of the Moon", "Another Ending", "Fragments of 2030", "500 Years Dedication",
-                        "Vessel of the Saint", "Origin Bullet", "Before Awakening", "Volumen Hydrargyrum",
-                        "Ideal Holy King"));
+        List<String> ce5Stars = Files.readAllLines(new File("5StarCEList.txt").toPath(),
+                Charset.defaultCharset());
 
-        List<String> ce4Stars = new ArrayList<>(
-                List.of("Iron-Willed Training", "Primeval Curse", "Projection", "Gandr", "Verdant Sound of Destruction",
-                        "Gem Magecraft: Antumbra",
-                        "Be Elegant", "Imaginary Number Magecraft", "Divine Banquet", "Angel's Song", "With One Strike",
-                        "Code Cast", "Knight's Pride",
-                        "Necromancy", "Awakened Will", "Golden Millenium Tree", "Innocent Maiden", "Gentle Affection",
-                        "Art of Death", "Art of the Poisonous Snake", "Record Holder", "Holy Shroud of Magdalene",
-                        "Seal Designation Enforcer"));
+        List<String> ce4Stars = Files.readAllLines(new File("4StarCEList.txt").toPath(),
+                Charset.defaultCharset());
 
-        List<String> ce3Stars = new ArrayList<>(
-                List.of("Azoth Blade", "Inverted Moon of the Heavens", "Fragarach", "Battle of Camlann",
-                        "Jeweled Sword Zelretch", "Extremly Spicy Mapo Tofu", "Bygone Dream", "Ath nHabla",
-                        "Bronze-Link Manipulator", "Self Geas Scroll", "Beast of Billows", "Lugh's Halo",
-                        "Stuffed Lion", "Hermitage", "Motored Cuirassier", "Storch Ritter", "Elixir of Love",
-                        "Ryudoji Temple", "Clock Tower", "Demon Boar", "Anchors Aweigh", "Mooncell Automaton",
-                        "Parted Sea", "Dragonkin", "The Crimson Black Keys", "The Verdant Black Keys",
-                        "The Azure Black Keys", "False Attendant's Writings", "Azoth Blade"));
+        List<String> ce3Stars = Files.readAllLines(new File("3StarCEList.txt").toPath(),
+                Charset.defaultCharset());
+
+        // List<String> servants5Stars = new ArrayList<>(
+        // List.of("Artoria Pendragon", "Altera", "Mordred", "Dioscuri", "Orion",
+        // "Nikola Tesla",
+        // "Arjuna", "Napoleon", "Minamoto no Tametomo", "Karna", "Artoria Pendragon
+        // (Lancer)",
+        // "Enkidu", "Bradamante", "Vritra", "Bhima", "Francis Drake", "Queen Medb",
+        // "Ozymandias",
+        // "Quetzalcoatl", "Achilles", "Europa", "Odysseus", "Nemo", "Tai Gong Wang",
+        // "Zhuge Liang",
+        // "Tamamo no Mae", "Xuanzang Sanzang", "Scheherazade", "Anastasia", "Jack the
+        // Ripper",
+        // "Osakabehime", "Li Shuwen", "Vlad III", "Nightingale", "Cu Chullain (Alter)",
+        // "Xiang Yu",
+        // "Galatea", "Jeanne d'Arc", "Nitocris Alter", "Jinako Carigri", "Sitonai"));
+
+        // List<String> servants4Stars = new ArrayList<>(
+        // List.of("Artoria Pendragon (Alter)", "Nero Claudius", "Siegfried", "Chevalier
+        // d'Eon", "Rama",
+        // "Lancelot (Saber)", "Gawain", "Suzuka Gozen", "Yagyu Munenori", "Diarmuid Ua
+        // Duibhne (Saber)",
+        // "Lanling Wang", "Lakshimibai", "Watanabe no Tsuna", "Barghest", "Roland",
+        // "EMIYA", "Atalanta",
+        // "Tristan", "EMIYA (Alter)", "Tomoe Gozen", "Chiron", "Asvatthaman", "Baobhan
+        // Sith", "Zenobia",
+        // "Elizabeth Bathory", "Artoria Pendragon (Lancer Alter)", "Fionn mac
+        // Cumhaill",
+        // "Li Shuwen (Lancer)",
+        // "Vlad III (EXTRA)", "Medusa (Lancer)", "Parvati", "Nezha", "Valkyrie", "Qin
+        // Liangyu", "Caenis",
+        // "Percival", "Don Quixote", "Marie Antoinette", "Martha", "Anne Bonny & Mary
+        // Read", "Astolfo",
+        // "Dobrynya Nikitich", "Huang Feihu", "Medea (Lily)", "Nursery Rhyme", "Helena
+        // Blavatsky",
+        // "Thomas Edison",
+        // "Nitocris", "Gilgamesh (Caster)", "Circe", "Queen of Sheba", "Stheno",
+        // "Carmilla",
+        // "EMIYA (Assassin)",
+        // "Yan Qing", "Wu Zetian", "Mochizuki Chiyome", "Kato Danzo", "Consort Yu",
+        // "Hercales",
+        // "Lancelot",
+        // "Tamamo Cat", "Frankenstein", "Beowulf", "Ibaraki Douji", "Pethesilea",
+        // "Atalanta (Alter)",
+        // "Kreimhild",
+        // "Duryodhana", "Astrea", "Gorgon", "Hessian Lobo", "Hephaestion",
+        // "Tenochtitlan"));
+
+        // List<String> servants3Stars = new ArrayList<>(
+        // List.of("Gaius Julius Caesar", "Gilles de Rais (Saber)", "Fergus mac Roich",
+        // "Bedivere", "Robin Hood",
+        // "Euryale",
+        // "David", "Kid Gil", "Billy the Kid", "Tawara Touta", "William Tell", "Cu
+        // Chullain",
+        // "Cu Chullain (Prototype)",
+        // "Hector", "Romulus", "Diarmuid Ua Duibhne", "Jaguar Man", "Hozoin Inshun",
+        // "Medusa", "Boudica",
+        // "Ushiwakamaru",
+        // "Alexander", "Christopher Columbus", "Red Hare", "Mandricardo", "Medea",
+        // "Gilles de Rais",
+        // "Mephistopheles",
+        // "Cu Chullain (Caster)", "Paracelsus von Hohenheim", "Charles Babbage",
+        // "Geronimo", "Avicebron",
+        // "Asclepius",
+        // "Zhang Jue", "Jing Ke", "Henry Jekyll & Hyde", "Hassan of the Hundred Faces",
+        // "Fuma Kotaro",
+        // "Hassan of the Serenity",
+        // "Lu Bu Fengxian", "Darius III", "Kiyohime", "Antonio Salieri", "Xu Fu"));
+
+        // List<String> ce5Stars = new ArrayList<>(
+        // List.of("Formal Craft", "Imaginary Around", "Limited Zero Over",
+        // "Kaleidoscope", "Heaven's Feel",
+        // "Prisma Cosmos", "The Black Grail",
+        // "Victor of the Moon", "Another Ending", "Fragments of 2030", "500 Years
+        // Dedication",
+        // "Vessel of the Saint", "Origin Bullet", "Before Awakening", "Volumen
+        // Hydrargyrum",
+        // "Ideal Holy King"));
+
+        // List<String> ce4Stars = new ArrayList<>(
+        // List.of("Iron-Willed Training", "Primeval Curse", "Projection", "Gandr",
+        // "Verdant Sound of Destruction",
+        // "Gem Magecraft: Antumbra",
+        // "Be Elegant", "Imaginary Number Magecraft", "Divine Banquet", "Angel's Song",
+        // "With One Strike",
+        // "Code Cast", "Knight's Pride",
+        // "Necromancy", "Awakened Will", "Golden Millenium Tree", "Innocent Maiden",
+        // "Gentle Affection",
+        // "Art of Death", "Art of the Poisonous Snake", "Record Holder", "Holy Shroud
+        // of Magdalene",
+        // "Seal Designation Enforcer"));
+
+        // List<String> ce3Stars = new ArrayList<>(
+        // List.of("Azoth Blade", "Inverted Moon of the Heavens", "Fragarach", "Battle
+        // of Camlann",
+        // "Jeweled Sword Zelretch", "Extremly Spicy Mapo Tofu", "Bygone Dream", "Ath
+        // nHabla",
+        // "Bronze-Link Manipulator", "Self Geas Scroll", "Beast of Billows", "Lugh's
+        // Halo",
+        // "Stuffed Lion", "Hermitage", "Motored Cuirassier", "Storch Ritter", "Elixir
+        // of Love",
+        // "Ryudoji Temple", "Clock Tower", "Demon Boar", "Anchors Aweigh", "Mooncell
+        // Automaton",
+        // "Parted Sea", "Dragonkin", "The Crimson Black Keys", "The Verdant Black
+        // Keys",
+        // "The Azure Black Keys", "False Attendant's Writings", "Azoth Blade"));
 
         double rollChance1 = rand.nextDouble(100.00);
 
