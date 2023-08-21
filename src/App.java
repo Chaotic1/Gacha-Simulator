@@ -10,72 +10,72 @@ public class App {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        Scanner scan = new Scanner(System.in);
+        try (Scanner scan = new Scanner(System.in)) {
+            int counter = 0;
+            int choice = 0;
+            boolean state = true;
 
-        int counter = 0;
-        int choice = 0;
-        boolean state = true;
+            System.out.println(
+                    "Pick a choice... \n 1. FGO Gacha\n 2. Arknights Gacha\n 3. Blue Archive Gacha\n 4. CSGO Knife Case Opening\n 5. Exit");
+            System.out.print("Choice: ");
+            choice = scan.nextInt();
 
-        System.out.println(
-                "Pick a choice... \n 1. FGO Gacha\n 2. Arknights Gacha\n 3. Blue Archive Gacha\n 4. CSGO Knife Case Opening\n 5. Exit");
-        System.out.print("Choice: ");
-        choice = scan.nextInt();
+            switch (choice) {
+                case 1: // FGO Gacha
+                    while (state) {
+                        System.out.println("How many times do you wanna gacha?");
+                        int amount = scan.nextInt();
+                        for (int i = 0; i < amount; i++) {
+                            System.out.println("Choose how many times do you want to roll... (1x |10x)");
+                            System.out.print("Choice: ");
+                            int roll = scan.nextInt();
 
-        switch (choice) {
-            case 1:
-                while (state) {
-                    System.out.println("How many times do you wanna gacha?");
-                    int amount = scan.nextInt();
-                    for (int i = 0; i < amount; i++) {
-                        System.out.println("Choose how many times do you want to roll... (1x |10x)");
-                        System.out.print("Choice: ");
-                        int roll = scan.nextInt();
-
-                        if (roll == 1 || roll == 10) {
-                            if (roll == 1) {
-                                FGORoll(roll);
-                                counter++;
-                                if (counter == 10) {
+                            if (roll == 1 || roll == 10) {
+                                if (roll == 1) {
                                     FGORoll(roll);
-                                    counter = 0;
+                                    counter++;
+                                    if (counter == 10) {
+                                        FGORoll(roll);
+                                        counter = 0;
+                                    }
+                                } else if (roll == 10) {
+                                    for (int y = 0; y < roll + 1; y++) {
+                                        FGORoll(roll);
+                                        System.out.println();
+                                    }
                                 }
-                            } else if (roll == 10) {
-                                for (int y = 0; y < roll + 1; y++) {
-                                    FGORoll(roll);
-                                    System.out.println();
-                                }
+
+                            } else {
+                                System.out.println("Invalid Input. Please Pick Again.");
+                                amount = amount + 1;
                             }
+                        }
 
+                        System.out.println("Do you want to roll again? [Y/N]");
+                        System.out.print("Choice: ");
+                        String str = scan.next();
+
+                        if (str.equalsIgnoreCase("yes") || str.equalsIgnoreCase("y")) {
+                            state = true;
                         } else {
-                            System.out.println("Invalid Input. Please Pick Again.");
-                            amount = amount + 1;
+                            state = false;
+                            System.out.println("See you soon!");
+                            main(args);
                         }
                     }
+                case 2: // Arknights Gacha
 
-                    System.out.println("Do you want to roll again? [Y/N]");
-                    System.out.print("Choice: ");
-                    String str = scan.next();
+                    break;
+                case 3:
 
-                    if (str.equalsIgnoreCase("yes") || str.equalsIgnoreCase("y")) {
-                        state = true;
-                    } else {
-                        state = false;
-                        System.out.println("See you soon!");
-                        main(args);
-                    }
-                }
-            case 2:
+                    break;
+                case 4:
 
-                break;
-            case 3:
+                    break;
+                case 5:
 
-                break;
-            case 4:
-
-                break;
-            case 5:
-
-                break;
+                    break;
+            }
         }
 
     }
